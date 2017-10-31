@@ -3,7 +3,7 @@ Created on 30 Oct 2017
 
 @author: mlecce
 '''
-
+import os
 import re
 
 def input_formatter(filein, fileout):
@@ -26,3 +26,14 @@ def input_formatter(filein, fileout):
         
     fin.close()
     fout.close()
+    
+def parse_input_dir(inputdir):
+    outputdir = inputdir+"_PARSED"
+    #create a new folder for the parsed files
+    if not os.path.exists(outputdir):
+        os.makedirs(outputdir)
+        
+    for filename in os.listdir(inputdir):
+        inpath = inputdir + "\\" + filename
+        outpath = outputdir + "\\" + os.path.basename(filename) + ".txt"
+        input_formatter(inpath, outpath)
