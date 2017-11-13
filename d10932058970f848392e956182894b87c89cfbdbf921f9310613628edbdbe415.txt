@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" package="my.com.astro.awani" platformBuildVersionCode="23" platformBuildVersionName="6.0.1">
+    <supports-screens android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" android:xlargeScreens="false"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COURSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <permission android:name="my.com.astro.awani.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+    <uses-permission android:name="my.com.astro.awani.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <application android:icon="@drawable/app_icn" android:label="@string/app_name" android:name="my.com.astro.awani.AstroAwaniApplication" android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity android:configChanges="keyboardHidden|locale|orientation|screenSize" android:exported="true" android:label="@string/app_name" android:launchMode="singleTop" android:name="my.com.astro.awani.ui.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
+            <meta-data android:name="android.app.default_searchable" android:value=".ui.SearchListingActivity"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|locale|orientation|screenSize" android:name="my.com.astro.awani.ui.NewsDetailActivity"/>
+        <activity android:configChanges="keyboardHidden|locale|orientation|screenSize" android:exported="false" android:label="@string/app_name" android:launchMode="singleTop" android:name="my.com.astro.awani.ui.SearchListingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
+            <meta-data android:name="android.app.default_searchable" android:value=".ui.SearchListingActivity"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|locale|orientation|screenSize" android:hardwareAccelerated="false" android:name="com.twitter.android.TWLoginActivity"/>
+        <activity android:configChanges="keyboardHidden|locale|orientation|screenSize|smallestScreenSize" android:hardwareAccelerated="false" android:label="@string/app_name" android:name="com.facebook.LoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:configChanges="keyboardHidden|locale|orientation|screenSize" android:name="my.com.astro.awani.ui.PrintDialogActivity"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:name="com.google.ads.AdActivity"/>
+        <activity android:name="my.com.astro.awani.twitter.TestPost" android:theme="@android:style/Theme.Dialog"/>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/applicationId"/>
+        <receiver android:name="my.com.astro.awani.push.BroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="my.com.astro.awani"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="my.com.astro.awani.service.GCMIntentService"/>
+        <receiver android:enabled="true" android:exported="true" android:name="com.inmobi.commons.analytics.androidsdk.IMAdTrackerReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:label="@string/app_name" android:name="my.com.astro.awani.appwidget.AstroAwaniAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="my.com.astro.awani.appwidget.AstroAwaniAppWidget.ACTION_WIDGET_REFRESH"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/app_widget_info"/>
+        </receiver>
+        <service android:name="my.com.astro.awani.service.AppWidgetUpdateService"/>
+        <activity android:label="@string/title_activity_custom_splash" android:name="my.com.astro.awani.CustomSplashActivity"/>
+    </application>
+</manifest>
