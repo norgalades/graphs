@@ -34,19 +34,26 @@ def check_node_component(G, file):
                     break #step to next node
                 elif "service" in row:
                     d = {n : 'service'}
-                    n.set_node_attributes(G, d, "compType")
+                    nx.set_node_attributes(G, d, "compType")
                     break #step to next node
                 elif "provider" in row:
                     d = {n : 'provider'}
-                    n.set_node_attributes(G, d, "compType")
+                    nx.set_node_attributes(G, d, "compType")
                     break #step to next node
                 elif "receiver" in row:
                     d = {n : 'receiver'}
-                    n.set_node_attributes(G, d, "compType")
+                    nx.set_node_attributes(G, d, "compType")
                     break #step to next node
         else:
             d = {n : 'innerClass'}
             nx.set_node_attributes(G, d, "compType")
+            
+def check_edge_component(G, file):
+    #Open the corresponding AndroidManidest 
+    with open(file, 'r') as fin:
+        rows = fin.read().splitlines(True)
+        
+        
             
 #Main program 
 #Create the database with malware's graphs for a certain family 
@@ -57,8 +64,8 @@ for filename in os.listdir(inputdir1):
     #Read the edge list and populate the graph corresponding to sample_number
     sample_number+=1
     
-check_node_component(DGs[0], "AndroidManifest_da5b.xml")    
-    
+check_node_component(DGs[1], "AndroidManifest_da5b.xml")    
+check_node_component(DGs[0], "AndroidManifest_d109.xml")    
 #Print some information on the just read graph
 print("Number of nodes in each graph")
 i=1
@@ -67,8 +74,16 @@ for DG in DGs:
     print(DG.number_of_nodes())
     i+=1
     nodes = [n for n in DG.nodes()]
-    print(nx.get_node_attributes(DG, "compType"))
+    compTypes = nx.get_node_attributes(DG, "compType")
+    for node in nodes: 
+        if(compTypes[node] != "innerClass"):
+            print(node + ": " + compTypes[node])
+            for nb in nx.all_neighbors(DG, node): 
+                print(nb)
+            print("\n")
     #edges = [e for e in DG.edges()]
     #print(edges)
+    
+    print("\n")
 
 
