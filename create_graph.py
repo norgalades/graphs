@@ -4,19 +4,43 @@ Created on 23 Oct 2017
 @author: mlecce
 '''
 
+###############################################################################################################################################
+#                                                  Import section
+#
+###############################################################################################################################################
+
 import networkx as nx
+from networkx.algorithms import isomorphism
+#import matplotlib.pyplot as plt
 import os
 from format_input import parse_input_dir
+from max_sub_graph import *
+
+###############################################################################################################################################
+#                                                  Variable assignment
+#
+###############################################################################################################################################
 
 #Inputs and variables
 inputdir1 = "METASPLOIT"
 #Format the input file so that it is possible to read the edges and write it to file output
-parse_input_dir(inputdir1)
+#parse_input_dir(inputdir1)
 inputdir1+="_PARSED"
 
 DGs = list()
 
-#Functions
+###############################################################################################################################################
+#                                                  functions' section
+#
+###############################################################################################################################################
+
+#This function searches for the node category on the AndroidManifesdt.xml file and assigns to each node one of the following categories:
+# 1) activity
+# 2) service
+# 3) provider
+# 4) receiver
+# if no reference about the node it's found, it is probably because the node is an inner class of the translation to the Smili code. So: 
+# 5) innerClass
 def check_node_component(G, file):
     #Open the corresponding AndroidManidest 
     with open(file, 'r') as fin:
@@ -47,15 +71,19 @@ def check_node_component(G, file):
         else:
             d = {n : 'innerClass'}
             nx.set_node_attributes(G, d, "compType")
-            
+
+#This function searches for the edge category on the AndroidManifesdt.xml file and assigns to each of them one of the following categories:     
+#TODO       
 def check_edge_component(G, file):
     #Open the corresponding AndroidManidest 
     with open(file, 'r') as fin:
         rows = fin.read().splitlines(True)
-        
-        
+          
+###############################################################################################################################################
+#                                                  Main section
+#
+###############################################################################################################################################
             
-#Main program 
 #Create the database with malware's graphs for a certain family 
 sample_number=0
 for filename in os.listdir(inputdir1):
@@ -63,9 +91,10 @@ for filename in os.listdir(inputdir1):
     DGs.append(nx.read_edgelist(inputdir1+"\\"+filename, create_using=nx.DiGraph()))
     #Read the edge list and populate the graph corresponding to sample_number
     sample_number+=1
-    
-check_node_component(DGs[1], "AndroidManifest_da5b.xml")    
+
+check_node_component(DGs[1], "AndroidManifest_d109.xml")          
 check_node_component(DGs[0], "AndroidManifest_d109.xml")    
+
 #Print some information on the just read graph
 print("Number of nodes in each graph")
 i=1
@@ -86,4 +115,6 @@ for DG in DGs:
     
     print("\n")
 
+check_subgraph_isomorphism(DGs[0], DGs[1])
+print_isomorphic_subgraphs(DGs[0], DGs[1])
 
