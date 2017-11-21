@@ -23,9 +23,6 @@ from max_sub_graph import *
 
 #Inputs and variables
 inputdir1 = "METASPLOIT"
-#Format the input file so that it is possible to read the edges and write it to file output
-parse_input_dir(inputdir1)
-inputdir1+="_PARSED"
 
 #List of all the malware directed graphs 
 DGs = list()
@@ -79,12 +76,10 @@ def check_node_component(G, file):
 This function creates the database with malware's graphs for a certain family 
 '''            
 def populate_list():
-    sample_number=0
     for filename in os.listdir(inputdir1):
         #Create a directed graph 
         DGs.append(nx.read_edgelist(inputdir1+"\\"+filename, create_using=nx.DiGraph()))
-        #Read the edge list and populate the graph corresponding to sample_number
-        sample_number+=1
+        DGs[-1].graph['name'] = filename[:-7]
     
     check_node_component(DGs[2], "AndroidManifest_da5b.xml")
     check_node_component(DGs[1], "AndroidManifest_d109.xml")          
@@ -92,11 +87,10 @@ def populate_list():
     
     #Print some information on the just read graph
     print("Number of nodes in each graph")
-    i=1
+
     for DG in DGs:
-        print("Graph" + str(i))
+        print("Graph name: " + str(DG.graph['name']))
         print(DG.number_of_nodes())
-        i+=1
         print_graph(DG)
         print("\n")
 
@@ -123,12 +117,17 @@ def search_the_exact_match(G):
 #                                                  Main section
 #
 ###############################################################################################################################################
+
+#Format the input file so that it is possible to read the edges and write it to file output
+parse_input_dir(inputdir1)
+inputdir1+="_PARSED"
    
 #Read malware files and populate the list with their graphs       
 populate_list()
 
 #Read the graph of an application X 
 G = nx.read_edgelist("adiacency_list.txt", create_using=nx.DiGraph())
+G.graph['name'] = "app_under_analysis"
 print("Application graph:")
 print_graph(G)
 
