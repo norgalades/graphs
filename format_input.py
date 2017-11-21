@@ -3,6 +3,16 @@ Created on 30 Oct 2017
 
 @author: mlecce
 '''
+###############################################################################################################################################
+#                                                  Description
+#
+###############################################################################################################################################
+
+''' 
+This file provides two functions to format the input (malware samples' files) so that they can be used by the networkx library.
+In particular, they parse the input files to provide networkx functions with a list of couples nodeA nodeB representing the edges 
+of the graph
+'''
 
 ###############################################################################################################################################
 #                                                  Import section
@@ -13,7 +23,7 @@ import os
 import re
 
 ###############################################################################################################################################
-#                                                  functions' section
+#                                                  Functions' section
 #
 ###############################################################################################################################################
 
@@ -48,27 +58,4 @@ def parse_input_dir(inputdir):
         inpath = inputdir + "\\" + filename
         outpath = outputdir + "\\" + os.path.basename(filename) + ".txt"
         input_formatter(inpath, outpath)
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
