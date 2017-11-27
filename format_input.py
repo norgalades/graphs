@@ -56,6 +56,6 @@ def parse_input_dir(inputdir):
         
     for filename in os.listdir(inputdir):
         inpath = inputdir + "\\" + filename
-        outpath = outputdir + "\\" + os.path.basename(filename) + ".txt"
+        outpath = outputdir + "\\" + os.path.splitext(filename)[0] + ".txt"
         input_formatter(inpath, outpath)
     

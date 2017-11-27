@@ -37,10 +37,14 @@ T = 3
 def print_graph(G):
     nodes = [n for n in G.nodes()]
     #compTypes = nx.get_node_attributes(G, "compType")
+    neighbors = []
     for node in nodes: 
+        #Find all the neighbors: the functions returns predecessors as well as successors
+        neighbors = nx.all_neighbors(G, node)
+        filtered_neighbors = set(neighbors)
         #print(node + ": " + compTypes[node])
-        print(node + ": ")
-        for nb in nx.all_neighbors(G, node): 
+        print(node + "'s neighbors: ")
+        for nb in filtered_neighbors: 
             print(nb)
         print("\n")
 
@@ -60,8 +64,8 @@ def check_subgraph_isomorphism(G1, G2):
     if(GM.subgraph_is_isomorphic()):
         nodes = []
         #An iterator of the type: nodeA_in_G1 : nodeA_prime_in_G2 over all the subgraphs that match G2
+        print("All subgraphs of G1 matching G2: ")
         for G in GM.subgraph_isomorphisms_iter():
-            print("All subgraphs of G1 matching G2: ")
             print(G)
             nodes.append(len(G))
         return max(nodes)

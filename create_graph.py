@@ -23,6 +23,7 @@ from max_sub_graph import *
 
 #Inputs and variables
 inputdir1 = "METASPLOIT"
+inputdir2 = "METASPLOIT_MANIFESTS"
 
 #List of all the malware directed graphs 
 DGs = list()
@@ -80,11 +81,8 @@ def populate_list():
         #Create a directed graph 
         DGs.append(nx.read_edgelist(inputdir1+"\\"+filename, create_using=nx.DiGraph()))
         DGs[-1].graph['name'] = filename[:-7]
-    
-    check_node_component(DGs[2], "AndroidManifest_da5b.xml")
-    check_node_component(DGs[1], "AndroidManifest_d109.xml")          
-    check_node_component(DGs[0], "AndroidManifest_d109.xml")    
-    
+        check_node_component(DGs[-1], inputdir2+"\\"+os.path.splitext(filename)[0])
+        
     #Print some information on the just read graph
     print("Number of nodes in each graph")
 
