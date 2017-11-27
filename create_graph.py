@@ -13,6 +13,7 @@ import networkx as nx
 from networkx.algorithms import isomorphism
 #import matplotlib.pyplot as plt
 import os
+import sys
 from format_input import parse_input_dir
 from max_sub_graph import *
 
@@ -82,7 +83,8 @@ def populate_list():
         DGs.append(nx.read_edgelist(inputdir1+"\\"+filename, create_using=nx.DiGraph()))
         DGs[-1].graph['name'] = filename[:-7]
         check_node_component(DGs[-1], inputdir2+"\\"+os.path.splitext(filename)[0])
-        
+    
+    '''    
     #Print some information on the just read graph
     print("Number of nodes in each graph")
 
@@ -91,6 +93,7 @@ def populate_list():
         print(DG.number_of_nodes())
         print_graph(DG)
         print("\n")
+    '''
 
 '''
 This function prints how many matching criteria subgraphs were found between graph G and family X. 
@@ -116,6 +119,9 @@ def search_the_exact_match(G):
 #
 ###############################################################################################################################################
 
+#Redirects the prints to a file
+sys.stdout = open('output.txt','wt')
+
 #Format the input file so that it is possible to read the edges and write it to file output
 parse_input_dir(inputdir1)
 inputdir1+="_PARSED"
@@ -124,10 +130,13 @@ inputdir1+="_PARSED"
 populate_list()
 
 #Read the graph of an application X 
-G = nx.read_edgelist("adiacency_list.txt", create_using=nx.DiGraph())
+G = nx.read_edgelist("09147e38e3df0902dd71cab54b24ffd72d708fff05aaa256ba7aaa2d55e39b57.txt", create_using=nx.DiGraph())
 G.graph['name'] = "app_under_analysis"
+check_node_component(G, "09147e38e3df0902dd71cab54b24ffd72d708fff05aaa256ba7aaa2d55e39b57")
 print("Application graph:")
 print_graph(G)
+print("Number of nodes:")
+print(G.number_of_nodes())
 
 compare_with_family_X(G)
 #check_subgraph_isomorphism(DGs[0], DGs[1])
