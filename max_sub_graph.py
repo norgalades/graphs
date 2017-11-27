@@ -27,7 +27,7 @@ from networkx.algorithms import isomorphism
 ###############################################################################################################################################
 
 #Threshold for the number of nodes on subgraphs matching isomorphism criterias
-T = 3 
+T = 2 
 
 ###############################################################################################################################################
 #                                                  Functions' section
@@ -64,9 +64,10 @@ def check_subgraph_isomorphism(G1, G2):
     if(GM.subgraph_is_isomorphic()):
         nodes = []
         #An iterator of the type: nodeA_in_G1 : nodeA_prime_in_G2 over all the subgraphs that match G2
-        print("All subgraphs of G1 matching G2: ")
+        print("All subgraphs of " + str(G1.graph['name']) + " matching " + str(G2.graph['name']) + " :")
         for G in GM.subgraph_isomorphisms_iter():
             print(G)
+            print("\n")
             nodes.append(len(G))
         return max(nodes)
     else: 
