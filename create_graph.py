@@ -23,8 +23,8 @@ from max_sub_graph import *
 ###############################################################################################################################################
 
 #Inputs and variables
-inputdir1 = "METASPLOIT"
-inputdir2 = "METASPLOIT_MANIFESTS"
+inputdir1 = "SYRINGE"
+inputdir2 = "SYRINGE_MANIFESTS"
 
 #List of all the malware directed graphs 
 DGs = list()
@@ -84,16 +84,15 @@ def populate_list():
         DGs[-1].graph['name'] = filename[:-7]
         check_node_component(DGs[-1], inputdir2+"\\"+os.path.splitext(filename)[0])
     
-    '''    
+    #'''    
     #Print some information on the just read graph
-    print("Number of nodes in each graph")
 
     for DG in DGs:
         print("Graph name: " + str(DG.graph['name']))
         print(DG.number_of_nodes())
         print_graph(DG)
         print("\n")
-    '''
+    #'''
 
 '''
 This function prints how many matching criteria subgraphs were found between graph G and family X. 
@@ -130,15 +129,15 @@ inputdir1+="_PARSED"
 populate_list()
 
 #Read the graph of an application X 
-G = nx.read_edgelist("09147e38e3df0902dd71cab54b24ffd72d708fff05aaa256ba7aaa2d55e39b57.txt", create_using=nx.DiGraph())
+G = nx.read_edgelist("f29fcd749f5e1b4e701e2359fe12a0ac2a5927a37b1eb5b4e308de39e4dc95f4.txt", create_using=nx.DiGraph())
 G.graph['name'] = "app_under_analysis"
-check_node_component(G, "09147e38e3df0902dd71cab54b24ffd72d708fff05aaa256ba7aaa2d55e39b57")
+check_node_component(G, "f29fcd749f5e1b4e701e2359fe12a0ac2a5927a37b1eb5b4e308de39e4dc95f4")
 print("Application graph:")
 print_graph(G)
 print("Number of nodes:")
 print(G.number_of_nodes())
 
 compare_with_family_X(G)
-#check_subgraph_isomorphism(DGs[0], DGs[1])
+#check_subgraph_isomorphism(G, DGs[11])
 #print_isomorphic_subgraphs(DGs[0], DGs[1])
 
