@@ -80,11 +80,11 @@ This function creates the database with malware's graphs for a certain family
 def populate_list():
     for filename in os.listdir(inputdir1):
         #Create a directed graph 
-        DGs.append(nx.read_edgelist(inputdir1+"\\"+filename, create_using=nx.DiGraph()))
+        DGs.append(nx.read_edgelist(inputdir1+"/"+filename, create_using=nx.DiGraph()))
         DGs[-1].graph['name'] = filename[:-7]
-        check_node_component(DGs[-1], inputdir2+"\\"+os.path.splitext(filename)[0])
+        check_node_component(DGs[-1], inputdir2+"/"+os.path.splitext(filename)[0])
     
-    #'''    
+    '''    
     #Print some information on the just read graph
 
     for DG in DGs:
@@ -92,7 +92,7 @@ def populate_list():
         print(DG.number_of_nodes())
         print_graph(DG)
         print("\n")
-    #'''
+    '''
 
 '''
 This function prints how many matching criteria subgraphs were found between graph G and family X. 
@@ -122,7 +122,7 @@ def search_the_exact_match(G):
 sys.stdout = open('output.txt','wt')
 
 #Format the input file so that it is possible to read the edges and write it to file output
-parse_input_dir(inputdir1)
+#parse_input_dir(inputdir1)
 inputdir1+="_PARSED"
    
 #Read malware files and populate the list with their graphs       
@@ -133,7 +133,7 @@ G = nx.read_edgelist("f29fcd749f5e1b4e701e2359fe12a0ac2a5927a37b1eb5b4e308de39e4
 G.graph['name'] = "app_under_analysis"
 check_node_component(G, "f29fcd749f5e1b4e701e2359fe12a0ac2a5927a37b1eb5b4e308de39e4dc95f4")
 print("Application graph:")
-print_graph(G)
+#print_graph(G)
 print("Number of nodes:")
 print(G.number_of_nodes())
 

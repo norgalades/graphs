@@ -56,19 +56,19 @@ def check_isomorphism(G1, G2):
         print("The two graphs are not isomorphic!")
 
 '''
-This function checks if there is any subgraph in G1 that is isomorph to G2, and returns the number of nodes of the biggest subgraph matching 
-G2 (if any)
+This function checks if there is any subgraph in G1 that is isomorph to G2, and returns the number of nodes of the biggest subgraph matching G2 (if any)
 '''        
 def check_subgraph_isomorphism(G1, G2):
     GM = isomorphism.DiGraphMatcher(G1, G2)
     if(GM.subgraph_is_isomorphic()):
-        nodes = []
+        nodes = [0]
         #An iterator of the type: nodeA_in_G1 : nodeA_prime_in_G2 over all the subgraphs that match G2
         print("All subgraphs of " + str(G1.graph['name']) + " matching " + str(G2.graph['name']) + " :")
         for G in GM.subgraph_isomorphisms_iter():
-            print(G)
-            print("\n")
-            nodes.append(len(G))
+            if(check_nodes_criteria(G1, G2, G) == 1 ):
+                print(G)
+                print("\n")
+                nodes.append(len(G))
         return max(nodes)
     else: 
         return 0
@@ -80,7 +80,7 @@ It also receives the mapping between the nodes (a dictionary with all the the co
 def check_nodes_criteria(G1, G2, mapping):
     node_types1 = nx.get_node_attributes(G1, "compType")
     node_types2 = nx.get_node_attributes(G2, "compType")
-    for key , value in mapping:
+    for key , value in mapping.iteritems():
         if (node_types1[key] != node_types2[value]):
             return 0
     else:
@@ -148,14 +148,17 @@ def check_common_subgraph_with_family_X(G, CSG):
         return 0
     
 '''
-Check for the number of graphs in G1 isomorph with malwares from family X (considering the threshold, a subgraph has to contain at least T nodes
-in order to be considered as a match)
+Check for the number of graphs in G1 isomorph with malwares from family X (considering the threshold, a subgraph has to contain at least T nodes in order to be considered as a match). NB. The second parameter for the check_subgraph_isomorphism function has to be the smallest graph since the VF2 algorithm checks for any isomorphic subgraph in the first passed graph matching the whole second passed graph
 '''            
 def check_number_of_matches_with_family_X(G1, family_X_list):            
     sample_counter = 0
     for GS in family_X_list:
-        if(check_subgraph_isomorphism(G1, GS) > T):
-            sample_counter+=1
+        if(G1.number_of_nodes() > GS.number_of_nodes()):
+            if((check_subgraph_isomorphism(G1, GS) > T)):
+                sample_counter+=1
+        else:
+            if((check_subgraph_isomorphism(GS, G1) > T)):
+                sample_counter+=1
     return sample_counter
           
             
