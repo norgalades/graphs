@@ -53,24 +53,30 @@ def check_node_component(G, file):
     for n in nodes: 
         #For each node, search the component type and add it as attribute
         for row in rows:
-            if n in row: 
-                if "activity" in row:
+            if n in row:
+                #print(n + " in row: \n" + row) 
+                if "<activity" in row:
+                    print(n + " activity, in row: \n" + row)
                     d = {n : 'activity'}
                     nx.set_node_attributes(G, d, "compType")
                     break #step to next node
-                elif "service" in row:
+                elif "<service" in row:
+                    print(n + " service, in row: \n" + row)
                     d = {n : 'service'}
                     nx.set_node_attributes(G, d, "compType")
                     break #step to next node
-                elif "provider" in row:
+                elif "<provider" in row:
+                    print(n + " provider, in row: \n" + row)
                     d = {n : 'provider'}
                     nx.set_node_attributes(G, d, "compType")
                     break #step to next node
-                elif "receiver" in row:
+                elif "<receiver" in row:
+                    print(n + " receiver, in row: \n" + row)
                     d = {n : 'receiver'}
                     nx.set_node_attributes(G, d, "compType")
                     break #step to next node
         else:
+            print(n + " innerClass, in row: \n" + row)
             d = {n : 'innerClass'}
             nx.set_node_attributes(G, d, "compType")
  

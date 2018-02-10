@@ -36,14 +36,14 @@ T = 1
 
 def print_graph(G):
     nodes = [n for n in G.nodes()]
-    #compTypes = nx.get_node_attributes(G, "compType")
+    compTypes = nx.get_node_attributes(G, "compType")
     neighbors = []
     for node in nodes: 
         #Find all the neighbors: the functions returns predecessors as well as successors
         neighbors = nx.all_neighbors(G, node)
         filtered_neighbors = set(neighbors)
         #print(node + ": " + compTypes[node])
-        print(node + "'s neighbors: ")
+        print(node + " type: " + compTypes[node] + " neighbors: ")
         for nb in filtered_neighbors: 
             print(nb)
         print("\n")
@@ -66,6 +66,7 @@ def check_subgraph_isomorphism(G1, G2):
         print("All subgraphs of " + str(G1.graph['name']) + " matching " + str(G2.graph['name']) + " :")
         for G in GM.subgraph_isomorphisms_iter():
             if(check_nodes_criteria(G1, G2, G) == 1 ):
+                print("Subgraph: \n")
                 print(G)
                 print("\n")
                 nodes.append(len(G))
@@ -80,9 +81,11 @@ It also receives the mapping between the nodes (a dictionary with all the the co
 def check_nodes_criteria(G1, G2, mapping):
     node_types1 = nx.get_node_attributes(G1, "compType")
     node_types2 = nx.get_node_attributes(G2, "compType")
-    for key , value in mapping.iteritems():
+    for key , value in mapping.items():
         if (node_types1[key] != node_types2[value]):
             return 0
+        else:
+            print(key + ": "+ node_types1[key] + ", " + value + ": " + node_types2[value])
     else:
         return 1                   
       
