@@ -28,6 +28,7 @@ from networkx.algorithms import isomorphism
 
 #Threshold for the number of nodes on subgraphs matching isomorphism criterias
 T = 1 
+DGs = list()
 
 ###############################################################################################################################################
 #                                                  Functions' section
@@ -48,6 +49,17 @@ def print_graph(G):
             print(nb)
         print("\n")
 
+def print_subgraph(G):
+    nodes = [n for n in G.nodes()]
+    neighbors = []
+    for node in nodes: 
+        neighbors = nx.all_neighbors(G, node)
+        filtered_neighbors = set(neighbors)
+        print(node + " neighbors: ")
+        for nb in filtered_neighbors: 
+            print(nb)
+        print("\n")
+
 def check_isomorphism(G1, G2):
     GM = isomorphism.DiGraphMatcher(G1, G2)
     if(GM.is_isomorphic()):
@@ -56,9 +68,41 @@ def check_isomorphism(G1, G2):
         print("The two graphs are not isomorphic!")
 
 '''
-This function checks if there is any subgraph in G1 that is isomorph to G2, and returns the number of nodes of the biggest subgraph matching G2 (if any)
+This function builds the graph starting from the mapping. Therefore, it saves the mapping between a subgraph and the application_under_analysis as a group of nodes and edges connecting them, then stores it in the list of subgraphs DGs 
 '''        
-def check_subgraph_isomorphism(G1, G2):
+def save_sub_graph(G, mapping, b):
+    DG = nx.DiGraph()
+    #Add all the nodes in the subgraph
+    if b :
+        for key , value in mapping.items():
+            DG.add_node(key)
+    else:
+        for key , value in mapping.items():
+            DG.add_node(value)
+    #For all the edges of G connect the nodes in the subgraph
+    for (u, v) in G.edges():
+        if DG.has_node(u) and DG.has_node(v):
+            DG.add_edge(u, v)
+    DGs.append(DG)
+
+def compute_signature():
+    Sig = nx.DiGraph()
+    for G in DGs:
+        for (u, v) in G.edges():
+            if G.has_edge(u, v) == False:
+                Sig.add_edge(u, v, weight=1)
+            else: 
+                Sig.edge[u][v]['weight'] += 1
+    print("Signature: ")
+    for n,nbrs in Sig.adjacency():
+        for nbr,eattr in nbrs.items():
+            data=eattr['weight']
+            print('(%s, %s, %d)' % (n,nbr,data)) 
+
+'''
+This function checks if there is any subgraph in G1 that is isomorph to the whole G2, and returns the number of nodes of the biggest subgraph matching G2 (if any). The boolean b indicates if the application_under_analysis is G1 or G2 (according to how this function has been called by check_number_of_matches_with_family_X)
+'''        
+def check_subgraph_isomorphism(G1, G2, b):
     GM = isomorphism.DiGraphMatcher(G1, G2)
     if(GM.subgraph_is_isomorphic()):
         nodes = [0]
@@ -66,6 +110,11 @@ def check_subgraph_isomorphism(G1, G2):
         print("All subgraphs of " + str(G1.graph['name']) + " matching " + str(G2.graph['name']) + " :")
         for G in GM.subgraph_isomorphisms_iter():
             if(check_nodes_criteria(G1, G2, G) == 1 ):
+                #Save the subgraph 
+                if b : 
+                    save_sub_graph(G1, G, b)
+                else:
+                    save_sub_graph(G2, G, b)
                 print("Subgraph: \n")
                 print(G)
                 print("\n")
@@ -157,11 +206,12 @@ def check_number_of_matches_with_family_X(G1, family_X_list):
     sample_counter = 0
     for GS in family_X_list:
         if(G1.number_of_nodes() > GS.number_of_nodes()):
-            if((check_subgraph_isomorphism(G1, GS) > T)):
+            if((check_subgraph_isomorphism(G1, GS, True) > T)):
                 sample_counter+=1
         else:
-            if((check_subgraph_isomorphism(GS, G1) > T)):
+            if((check_subgraph_isomorphism(GS, G1, False) > T)):
                 sample_counter+=1
+    compute_signature()
     return sample_counter
           
             
