@@ -42,6 +42,8 @@ This function searches for the node category on the AndroidManifesdt.xml file an
 # 4) receiver
 # if no reference about the node it's found, it is probably because the node is an inner class of the translation to the Smali code. So: 
 # 5) innerClass
+# if the node name is just a letter the tool has probably assigned it. It was not able to retrieve the real name due to obfuscation. So:
+# 6) obfuscated
 '''
 def check_node_component(G, file):
     #Open the corresponding AndroidManidest 
@@ -52,33 +54,37 @@ def check_node_component(G, file):
     nodes = [n for n in G.nodes()]
     for n in nodes: 
         #For each node, search the component type and add it as attribute
-        for row in rows:
-            if n in row:
-                #print(n + " in row: \n" + row) 
-                if "<activity" in row:
-                    print(n + " activity, in row: \n" + row)
-                    d = {n : 'activity'}
-                    nx.set_node_attributes(G, d, "compType")
-                    break #step to next node
-                elif "<service" in row:
-                    print(n + " service, in row: \n" + row)
-                    d = {n : 'service'}
-                    nx.set_node_attributes(G, d, "compType")
-                    break #step to next node
-                elif "<provider" in row:
-                    print(n + " provider, in row: \n" + row)
-                    d = {n : 'provider'}
-                    nx.set_node_attributes(G, d, "compType")
-                    break #step to next node
-                elif "<receiver" in row:
-                    print(n + " receiver, in row: \n" + row)
-                    d = {n : 'receiver'}
-                    nx.set_node_attributes(G, d, "compType")
-                    break #step to next node
-        else:
-            print(n + " innerClass, in row: \n" + row)
-            d = {n : 'innerClass'}
+        if len(n) == 1 and n.isalpha():
+            d = {n : 'obfuscated'}
             nx.set_node_attributes(G, d, "compType")
+        else:
+            for row in rows:
+                if n in row:
+                    #print(n + " in row: \n" + row) 
+                    if "<activity" in row:
+                        #print(n + " activity, in row: \n" + row)
+                        d = {n : 'activity'}
+                        nx.set_node_attributes(G, d, "compType")
+                        break #step to next node
+                    elif "<service" in row:
+                        #print(n + " service, in row: \n" + row)
+                        d = {n : 'service'}
+                        nx.set_node_attributes(G, d, "compType")
+                        break #step to next node
+                    elif "<provider" in row:
+                        #print(n + " provider, in row: \n" + row)
+                        d = {n : 'provider'}
+                        nx.set_node_attributes(G, d, "compType")
+                        break #step to next node
+                    elif "<receiver" in row:
+                        #print(n + " receiver, in row: \n" + row)
+                        d = {n : 'receiver'}
+                        nx.set_node_attributes(G, d, "compType")
+                        break #step to next node
+                else:
+                    #print(n + " innerClass, in row: \n" + row)
+                    d = {n : 'innerClass'}
+                    nx.set_node_attributes(G, d, "compType")
  
 '''
 This function creates the database with malware's graphs for a certain family 
